@@ -1,4 +1,6 @@
 import cv2 as cv
+import sys
+import time
 
 def background_removal():
     # Camera stream
@@ -16,6 +18,11 @@ def background_removal():
     cv.namedWindow('frame',cv.WINDOW_NORMAL)
     cv.setWindowProperty('frame', cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
 
+    timed = False
+    if len(sys.argv) == 2:
+        timed = True
+        end_time = time.time() + int(sys.argv[1])
+
     while(True):
         # Read a single frame
         ret, frame = video.read()
@@ -28,6 +35,8 @@ def background_removal():
 
         # Check for 'escape' key (q)
         if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+        elif timed and time.time() > end_time:
             break
 
     # Release video stream and distroy display window
